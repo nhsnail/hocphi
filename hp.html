@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng thanh toán trực tuyến - UEL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+        }
+
+        /* Topbar & Header */
+        .top-bar {
+            background-color: #0d47a1;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10%;
+            font-size: 13px;
+        }
+
+        .top-nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            background-color: #fff;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: #0d47a1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .university-title h3 { color: #555; font-size: 12px; }
+        .university-title h1 { color: #0d47a1; font-size: 18px; font-weight: bold; }
+        .site-title h2 { color: #0d47a1; font-size: 20px; font-weight: bold; }
+
+        /* Banner chính */
+        .hero-banner {
+            background: linear-gradient(rgba(13, 71, 161, 0.55), rgba(13, 71, 161, 0.55)), 
+                        url('https://picsum.photos/1920/1080') no-repeat center center/cover;
+            min-height: 580px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 10%;
+        }
+
+        /* MÀN HÌNH 1: GIAO DIỆN BAN ĐẦU */
+        .banner-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .info-text {
+            flex: 1;
+            max-width: 55%;
+            color: #fff;
+        }
+
+        .info-text h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background-color: #ff5722;
+            margin-bottom: 20px;
+        }
+
+        .info-text p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #f0f0f0;
+        }
+
+        .search-box {
+            background-color: #ffffff;
+            color: #333;
+            padding: 35px 30px;
+            border-radius: 16px;
+            width: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .search-box h3 {
+            color: #0d47a1;
+            font-size: 20px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background-color: #fafafa;
+        }
+
+        /* MÀN HÌNH 2: GIAO DIỆN KẾT QUẢ TÌM KIẾM */
+        .result-container {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            flex: 1;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            color: #0d47a1;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background-color: #f25822;
+            border-radius: 2px;
+        }
+
+        /* Thẻ Thông Tin Sinh Viên */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+        }
+
+        .amount-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .amount-box input {
+            font-weight: bold;
+            color: #0d47a1;
+            font-size: 16px;
+            background-color: #f0f4f9;
+        }
+
+        .amount-box .arrow-icon {
+            position: absolute;
+            right: 15px;
+            color: #90a4ae;
+            font-size: 18px;
+        }
+
+        /* THIẾT KẾ CÁC KHUNG CHỌN CỔNG THANH TOÁN (DÙNG CODE VẼ) */
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .payment-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 8px;
+            cursor: pointer;
+            width: 110px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .payment-option.active {
+            border-color: #0d47a1;
+            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.2);
+        }
+
+        /* Tạo biểu tượng chữ/logo trực tiếp không lo lỗi ảnh */
+        .vnpay-qr-btn {
+            font-weight: bold;
+            font-size: 16px;
+            color: #005baa;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .vnpay-qr-btn span {
+            color: #e11b22;
+            font-size: 14px;
+        }
+
+        .vnpay-text-btn {
+            font-weight: bold;
+            font-size: 18px;
+            color: #005baa;
+            text-align: center;
+        }
+        .vnpay-text-btn .red-text { color: #e11b22; }
+        .vnpay-sub { font-size: 8px; color: #666; font-weight: normal; display: block; margin-top: 2px; }
+
+        .momo-box {
+            width: 50px;
+            height: 50px;
+            background-color: #a50064;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .btn-orange {
+            width: 100%;
+            padding: 14px;
+            background-color: #f25822;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-orange:hover {
+            background-color: #d94815;
+        }
+
+        .payment-action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+        }
+
+        .payment-action .btn-orange {
+            width: auto;
+            padding: 12px 40px;
+        }
+
+        .btn-back {
+            background: none;
+            border: none;
+            color: #0d47a1;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .error-msg {
+            color: #ffeb3b;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .banner-content, .result-container { flex-direction: column; }
+            .info-text, .search-box { max-width: 100%; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>Chào mừng bạn đến với hệ thống thanh toán</span>
+        <nav class="top-nav">
+            <a href="#">TRANG CHỦ</a>
+            <a href="#">GIỚI THIỆU</a>
+            <a href="#">HƯỚNG DẪN</a>
+            <a href="#">LIÊN HỆ</a>
+        </nav>
+    </div>
+
+    <header class="header">
+        <div class="logo-container">
+            <div class="logo-placeholder">UEL</div>
+            <div class="university-title">
+                <h3>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH</h3>
+                <h1>TRƯỜNG ĐẠI HỌC KINH TẾ - LUẬT</h1>
+            </div>
+        </div>
+        <div class="site-title">
+            <h2>CỔNG THANH TOÁN TRỰC TUYẾN</h2>
+        </div>
+    </header>
+
+    <section class="hero-banner">
+        
+        <!-- MÀN HÌNH 1: BAN ĐẦU -->
+        <div id="initialView" class="banner-content">
+            <div class="info-text">
+                <h2>HỆ THỐNG THANH TOÁN TRỰC TUYẾN - UEL</h2>
+                <div class="divider"></div>
+                <p>Cổng thanh toán trực tuyến E-BILLS.VN được sử dụng để người học thanh toán học phí và các khoản thu khác tại Trường Đại học Kinh tế - Luật (UEL)</p>
+                <p>- Cổng thanh toán trực tuyến tạo sự thuận tiện cho người học trong quá trình thanh toán học phí và các khoản phải nộp khác thông qua hệ thống thanh toán trực tuyến;</p>
+                <p>- Có thể sử dụng thẻ ngân hàng (ATM, Visa, Master,...) của nhiều ngân hàng khác nhau để nộp học phí;</p>
+                <p>- Thanh toán học phí nhanh chóng, không phải xếp hàng chờ;</p>
+                <p>- Phụ huynh, người thân có thể nộp học phí thay cho người học một cách dễ dàng, tiện lợi.</p>
+            </div>
+
+            <div class="search-box">
+                <h3>TRA CỨU THÔNG TIN</h3>
+                <div class="input-group">
+                    <input type="text" id="inputStudentId" placeholder="Mã sinh viên/Mã hợp đồng" value="K234040481">
+                </div>
+                <button class="btn-orange" onclick="handleSearch()">Tìm kiếm</button>
+                <div id="errorMsg" class="error-msg">Không tìm thấy mã sinh viên!</div>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 2: KẾT QUẢ TRA CỨU -->
+        <div id="resultView" class="result-container">
+            
+            <!-- THẺ BÊN TRÁI -->
+            <div class="card">
+                <div class="card-title">Thông tin sinh viên</div>
+                
+                <div class="form-group">
+                    <label>MSSV</label>
+                    <input type="text" id="resMssv" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Họ và tên sinh viên</label>
+                    <input type="text" id="resName" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Khoa</label>
+                    <input type="text" id="resFaculty" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Số tiền nợ học phí</label>
+                    <div class="amount-box">
+                        <input type="text" id="resAmount" readonly>
+                        <span class="arrow-icon">➔</span>
+                    </div>
+                </div>
+
+                <button class="btn-back" onclick="resetSearch()">← Quay lại tra cứu khác</button>
+            </div>
+
+            <!-- THẺ BÊN PHẢI (SỬ DỤNG CODE VẼ LOGO ĐẢM BẢO HIỂN THỊ 100%) -->
+            <div class="card">
+                <div class="card-title">Chọn hình thức thanh toán</div>
+                
+                <div class="payment-methods">
+                    <!-- VNPAY QR -->
+                    <div class="payment-option active" onclick="selectPayment(this)">
+                        <div class="vnpay-qr-btn">
+                            VNPAY<span>QR</span>
+                        </div>
+                    </div>
+
+                    <!-- VNPAY -->
+                    <div class="payment-option" onclick="selectPayment(this)">
+                        <div class="vnpay-text-btn">
+                            VN<span class="red-text">PAY</span>
+                            <span class="vnpay-sub">Cho cuộc sống đơn giản hơn</span>
+                        </div>
+                    </div>
+
+                    <!-- MOMO -->
+                    <div class="payment-option" onclick="selectPayment(this)">
+                        <div class="momo-box">
+                            mo<br>mo
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-action">
+                    <button class="btn-orange" onclick="processPayment()">Thanh toán</button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <script>
+        const database = [
+            {
+                mssv: "K234040481",
+                name: "Nguyễn Nam Hưng",
+                faculty: "Khoa Tài chính - Ngân hàng",
+                amount: "25.916.000 vnđ"
+            },
+            {
+                mssv: "SV01",
+                name: "Trần Thị Mai",
+                faculty: "Khoa Hệ thống thông tin",
+                amount: "18.500.000 vnđ"
+            }
+        ];
+
+        function handleSearch() {
+            const inputVal = document.getElementById("inputStudentId").value.trim();
+            const student = database.find(item => item.mssv.toLowerCase() === inputVal.toLowerCase());
+
+            if (student) {
+                document.getElementById("resMssv").value = student.mssv;
+                document.getElementById("resName").value = student.name;
+                document.getElementById("resFaculty").value = student.faculty;
+                document.getElementById("resAmount").value = student.amount;
+
+                document.getElementById("initialView").style.display = "none";
+                document.getElementById("resultView").style.display = "flex";
+                document.getElementById("errorMsg").style.display = "none";
+            } else {
+                document.getElementById("errorMsg").style.display = "block";
+            }
+        }
+
+        function resetSearch() {
+            document.getElementById("initialView").style.display = "flex";
+            document.getElementById("resultView").style.display = "none";
+        }
+
+        function selectPayment(element) {
+            document.querySelectorAll(".payment-option").forEach(opt => opt.classList.remove("active"));
+            element.classList.add("active");
+        }
+
+        function processPayment() {
+            const mssv = document.getElementById("resMssv").value;
+            const amount = document.getElementById("resAmount").value;
+            alert(`Chuyển đến cổng thanh toán cho SV: ${mssv}\nSố tiền: ${amount}`);
+        }
+    </script>
+</body>
+</html>
